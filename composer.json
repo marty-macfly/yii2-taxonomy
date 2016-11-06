@@ -1,0 +1,26 @@
+{
+	"name": "macfly/yii2-taxonomy",
+	"description": "Extend Yii2-taxonomy-term (by mhndev) by adding term definition (tags, properties). The extension complete the original module by adding behavior to add term, properties and tags to your model.",
+	"keywords": ["yii2", "taxonomy", "term", "properties", "tags", "property", "mhndev"],
+	"type": "yii2-extension",
+	"license": "BSD-3-Clause",
+	"support": {
+		"issues": "https://github.com/Marty-Macfly/yii2-taxonomy/issues",
+		"source": "https://github.com/Marty-Macfly/yii2-taxonomy"
+	},
+	"authors": [
+		{
+			"name": "Charles DELFLY",
+			"email": "c.delfly@linkbynet.com"
+		}
+	],
+	"minimum-stability": "stable",
+	"require": {
+		"mhndev/yii2-taxonomy-term": "1.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"macfly\\taxonomy\\": "src/"
+		}
+	}
+}
