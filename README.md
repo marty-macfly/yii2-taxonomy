@@ -224,6 +224,31 @@ class Post extends \yii\db\ActiveRecord
 }
 ```
 
+You can change 'tag' taxonomy type and name for a specific model with the following :
+
+```php
+use macfly\taxonomy\behaviors\TagTermBehavior;
+
+/**
+ * ...
+ * @property array $terms
+ * @property array $tags
+ */
+class Post extends \yii\db\ActiveRecord
+{
+    public function behaviors()
+    {
+        return [
+            'tag' => [
+                'class' => TagBehavior::className(),
+             		'type' => 'myposttagtype',
+             		'name' => 'myposttagname',
+            ],
+        ];
+    }
+}
+```
+
 ### get tags of an entity
 ```php
     $post = Post::findOne(['id'=>1]);
