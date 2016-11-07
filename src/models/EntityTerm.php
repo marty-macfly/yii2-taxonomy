@@ -20,18 +20,11 @@ class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
     return $this->hasOne(Term::className(), ['id' => 'term_id']);
   }
 
-
-  public function getTags()
-  {
-    return $this->hasMany(Tag::className(), ['id' => 'term_id']);
-  }
-
 	public function afterSave($insert, $changedAttributes)
 	{
 		// Increase Term usage Counter;
 		return  Term::findOne($this->term_id)->updateCounters(['usage_count' => 1]);
 	}
-
 
 	public function afterDelete()
 	{
