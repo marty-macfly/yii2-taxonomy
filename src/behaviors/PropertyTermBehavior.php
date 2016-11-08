@@ -3,7 +3,7 @@
 namespace macfly\taxonomy\behaviors;
 
 use macfly\taxonomy\models\EntityTerm;
-use macfly\taxonomy\models\Property;
+use macfly\taxonomy\models\PropertyTerm;
 use macfly\taxonomy\models\Taxonomy;
 use macfly\taxonomy\models\Term;
 
@@ -40,7 +40,7 @@ class PropertyTermBehavior extends BaseTermBehavior
     }
 
     $termsIdToDelete  = array_diff(ArrayHelper::getColumn($this->getPropertyTerms($type)->select(['term_id'])->asArray()->All(), 'term_id'), $termsIdAdded);
-
+  
     if(count($termsIdToDelete) > 0)
     {
       EntityTerm::DeleteAll(['term_id' => $termsIdToDelete, 'entity_id' => $this->owner->id, 'entity' => $this->owner->className()]);
@@ -58,13 +58,13 @@ class PropertyTermBehavior extends BaseTermBehavior
     return !is_null($this->getPropertyTerms($type)->where([Taxonomy::tableName() . '.name' => $name])->andWhere([Term::tableName() . '.name' => $value])->one());
   }
 
-  public function addPropertyTerm($type, $name, $value) 
+  public function addPropertyTerm($type, $name, $value)
   {
 		$term = PropertyTerm::create($type, $name, $value);
-		return $this-addTerm($term);
+		return $this->addTerm($term);
   }
 
-  public function delPropertyTerm($type, $name, $value) 
+  public function delPropertyTerm($type, $name, $value)
   {
 		$entity = $this->getPropertyTerms($type)->where([Taxonomy::tableName() . '.name' => $name])->andWhere([Term::tableName() . '.name' => $value])->all();
 
