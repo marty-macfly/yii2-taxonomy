@@ -27,6 +27,7 @@ class PropertyTerm
 			$term								= new Term();
 			$term->taxonomy_id	= $taxonomy->id;
 			$term->name					= $value;
+			$term->usage_count  = 0;
 
 			if(!$term->save())
 			{
