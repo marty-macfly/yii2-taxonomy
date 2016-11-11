@@ -2,6 +2,9 @@
 
 namespace macfly\taxonomy\models;
 
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
+
 class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
 {
 
@@ -20,6 +23,18 @@ class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
     return $this->hasOne(Term::className(), ['id' => 'term_id']);
   }
 
+	public function getNEntity()
+	{
+		$name = explode("\\",$this->entity);
+		$result = end($name);
+		return $result;
+	}
+
+	public function getREntity()
+	{
+		return $this->entity::findOne($this->entity_id);
+	}
+
 	public function afterSave($insert, $changedAttributes)
 	{
 		// Increase Term usage Counter;
@@ -31,7 +46,13 @@ class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
 		parent::afterDelete();
 
 		// Decrease Term usage Counter
-		return  Term::findOne($this->term_id)->updateCounters(['usage_count' => -1]);
+		Term::findOne($this->term_id)->updateCounters(['usage_count' => -1]);
+
+		// Purge unused term longer than one month
+		return Term::DeleteAll(['id'=>ArrayHelper::getColumn(Term::find()
+				->andWhere(['<', 'updated_at', new Expression('DATE_SUB(NOW(), INTERVAL 30 DAY)')])
+				->andWhere(['=','usage_count',0])
+				->all(),'taxonomy_id')]);
 	}
 
   public function __toString()
