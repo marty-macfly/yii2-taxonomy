@@ -9,7 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
+
 
 /**
  * TermController implements the CRUD actions for Term model.
@@ -25,7 +25,7 @@ class TermController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => [],
                 ],
             ],
         ];
@@ -65,6 +65,7 @@ class TermController extends Controller
         $model = new Term();
         $taxonomies = Taxonomy::find()->all();
         if ($model->load(Yii::$app->request->post())) {
+            $model->usage_count=0;
             $this->storeTerm($model);
         } else {
             return $this->render('create', [
@@ -97,7 +98,7 @@ class TermController extends Controller
     {
       $tag_type = Yii::$app->request->post('Taxonomy_type',null);
       $tag_name = Yii::$app->request->post('Taxonomy_name',null);
-      if(!is_null($tag_type) && !is_null($tag_name))
+      if(!is_null($tag_type) && !is_null($tag_name) && $tag_type != "not selected" && $tag_name != "not selected")
       {
         $tax = !Taxonomy::findOne(['type'=>$tag_type,'name'=>$tag_name])? null : Taxonomy::findOne(['type'=>$tag_type,'name'=>$tag_name]);
         //if new Taxonomy -> Save
@@ -114,22 +115,10 @@ class TermController extends Controller
           $model->taxonomy_id = $tax->id;
         }
         if($model->save()) return $this->redirect(['view', 'id' => $model->id]);
-        else return false;
+        else return $this->redirect('create');
       }
+      else return $this->redirect('create');
     }
-    /**
-     * Deletes an existing Term model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
     /**
      * Finds the Term model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

@@ -303,3 +303,39 @@ class Post extends \yii\db\ActiveRecord
     $post->addTag('foo');
 
 ```
+
+# Configuring to purge unused Term
+Basically unused Term will be delete in the period of time (default is 30 day) it’s help to remove useless tag.
+
+Configure route for action **config/console.php** as follows:
+
+```php
+    'controllerMap' => [
+                                ...
+        'term-cron' => [
+            'class' => 'macfly\taxonomy\controllers\TermcrController',
+        ],
+                                ...
+    ],
+
+```
+Defaut term will be delete if *updated_at* later than one month, if you want to define specific period time, just configure **config/params.php** as follows:
+
+```php
+    return [
+        ..............
+        'termPeriod' => 30, //days interger
+        ..............
+    ];
+```
+
+And you can add a cron job to run every 10 minutes with some controller action like this:
+
+on **Linux:**
+```bash
+    */10 * * * * /path/to/yii/application/yii term-cron >> /var/log/console-app.log 2>&1
+```
+on **Window Task Schedule:**
+```bash
+    /path/to/yii/application/yii term-cron
+```

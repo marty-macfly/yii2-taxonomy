@@ -2,7 +2,6 @@
 
 namespace macfly\taxonomy\models;
 
-use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
 class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
@@ -18,19 +17,28 @@ class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
 		];
 	}
 
+	//return term model assigned to this entity
   public function getTerm()
   {
     return $this->hasOne(Term::className(), ['id' => 'term_id']);
   }
 
-	public function getNEntity()
+	//return short name of this entity model, example: Post, Host
+	public function getEntityShortName()
 	{
 		$name = explode("\\",$this->entity);
 		$result = end($name);
 		return $result;
 	}
 
-	public function getREntity()
+	//return base name of this entity model, example: \common\models\Post
+	public function getEntityBaseName()
+	{
+		return $this->entity;
+	}
+
+	//return Entity model related to this Term
+	public function getChildEntity()
 	{
 		return $this->entity::findOne($this->entity_id);
 	}
@@ -44,15 +52,8 @@ class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
 	public function afterDelete()
 	{
 		parent::afterDelete();
-
 		// Decrease Term usage Counter
-		Term::findOne($this->term_id)->updateCounters(['usage_count' => -1]);
-
-		// Purge unused term longer than one month
-		return Term::DeleteAll(['id'=>ArrayHelper::getColumn(Term::find()
-				->andWhere(['<', 'updated_at', new Expression('DATE_SUB(NOW(), INTERVAL 30 DAY)')])
-				->andWhere(['=','usage_count',0])
-				->all(),'taxonomy_id')]);
+		return Term::findOne($this->term_id)->updateCounters(['usage_count' => -1]);
 	}
 
   public function __toString()

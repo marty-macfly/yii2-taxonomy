@@ -1,7 +1,5 @@
 $(document).ready(function() {
     var $app = $('body'),$window = $( window );
-    //chosen list tags
-    //$app.find(".tags-select").chosen({width: "100%"});
 
     //table responsive
     var $table_item = $app.find('#list-term');
