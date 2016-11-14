@@ -31,6 +31,25 @@ php yii migrate --migrationPath=@vendor/mhndev/yii2-taxonomy-term/src/migrations
 Usage
 ------------
 
+## Configuring to manage Taxonomy and Term in web interface
+
+Configure **config/web.php** as follows
+
+```php
+  'modules' => [
+            ................
+      'taxonomy' => [
+          'class' => 'macfly\taxonomy\Module'
+      ],
+            ................
+  ],
+```
+
+* Pretty Url's /taxonomy
+
+* No pretty Url's index.php?r=taxonomy
+
+
 ## Configuring to use Term
 
 Configure model as follows
@@ -283,31 +302,4 @@ class Post extends \yii\db\ActiveRecord
     $post = Post::findOne(['id'=>1]);
     $post->addTag('foo');
 
-```
-
-# Configuring to purge unused Term
-Basically unused Term will be delete in the period of time (it’s help to remove useless tag).
-
-Configure **config/console.php** as follows:
-
-```php
-    'controllerMap' => [
-                                ...
-        'term-cron' => [
-            'class' => 'macfly\taxonomy\controllers\TermcrController',
-        ],
-                                ...
-    ],
-
-```
-
-And you can add a cron job to run every 10 minutes with some controller action like this:
-
-on **Linux:**
-```bash
-    */10 * * * * /path/to/yii/application/yii term-cron >> /var/log/console-app.log 2>&1
-```
-on **Window Task Schedule:**
-```bash
-    /path/to/yii/application/yii term-cron
 ```
