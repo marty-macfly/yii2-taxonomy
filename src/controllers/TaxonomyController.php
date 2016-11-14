@@ -37,12 +37,9 @@ class TaxonomyController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Taxonomy::find(),
-        ]);
-
+        $taxonomies = Taxonomy::find()->all();
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'taxonomies' => $taxonomies,
         ]);
     }
 
