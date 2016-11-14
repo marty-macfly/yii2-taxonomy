@@ -18,6 +18,20 @@ $(document).ready(function() {
         } );
     } ).draw();
 
+    var $table_taxonomy = $app.find('#list-taxonomy');
+    $table_taxonomy = $table_taxonomy.DataTable({
+      responsive: true
+    }).columns.adjust()
+    .responsive.recalc();
+    $window.resize(function() {
+      $table_taxonomy.columns.adjust();
+    });
+    $table_taxonomy.on( 'order.dt search.dt', function () {
+        $table_taxonomy.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
+
     //terms assignment
     $app.find('#terms-select').multiSelect({
       cssClass:"terms-select",

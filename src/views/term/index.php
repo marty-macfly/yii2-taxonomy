@@ -55,14 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'title' => 'Update',
             'class' => 'glyphicon glyphicon-pencil',
             ]) ?>
-          <?= Html::a('', ['term/delete', 'id'=>$term->id], [
-            'title' => 'Delete',
-            'class' => 'glyphicon glyphicon-trash',
-            'data' => [
-              'confirm' => "Are you sure you want to delete profile?",
-              'method' => 'post',
-            ],
-            ]) ?>
           </span>
         </td>
         <td class="text-center">
@@ -86,14 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('', ['taxonomy/update', 'id'=>$term->taxonomy->id], [
               'title' => 'Update',
               'class' => 'glyphicon glyphicon-pencil',
-              ]) ?>
-            <?= Html::a('', ['taxonomy/delete', 'id'=>$term->taxonomy->id], [
-              'title' => 'Delete',
-              'class' => 'glyphicon glyphicon-trash',
-              'data' => [
-                'confirm' => "Are you sure you want to delete profile?",
-                'method' => 'post',
-              ],
               ]) ?>
             </span>
         </td>
