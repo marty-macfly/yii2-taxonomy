@@ -329,11 +329,11 @@ Defaut term will be delete if *updated_at* later than one month, if you want to 
     ];
 ```
 
-And you can add a cron job to run every 10 minutes with some controller action like this:
+And you can add a cron job (http://www.crontab-generator.org/) to run at *00:00 on every Sunday* with some controller action like this:
 
 on **Linux:**
 ```bash
-    */10 * * * * /path/to/yii/application/yii term-cron >> /var/log/console-app.log 2>&1
+    0 0 * * 0 /path/to/yii/application/yii term-cron >> /var/log/console-app.log 2>&1
 ```
 on **Window Task Schedule:**
 ```bash
