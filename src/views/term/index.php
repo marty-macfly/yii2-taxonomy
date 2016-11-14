@@ -46,8 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <td>
           <?php
             foreach($term->entity as $item):
-              echo "<span class='text-black-bg' title='".$item->entity."'>".$item->EntityShortName." </span>";
-              echo " | id: ".$item->ChildEntity->id;
+              echo "<span class='text-black-bg' title='".$item->entity."'>". $item->entity ." </span>";
+              echo " | id: ". $item->childEntity->id;
               echo "<br>";
             endforeach;
             ?>

@@ -23,18 +23,11 @@ class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
     return $this->hasOne(Term::className(), ['id' => 'term_id']);
   }
 
-	//return short name of this entity model, example: Post, Host
-	public function getEntityShortName()
-	{
-		$name = explode("\\",$this->entity);
-		$result = end($name);
-		return $result;
-	}
-	
 	//return Entity model related to this Term
 	public function getChildEntity()
 	{
-		return $this->entity::findOne($this->entity_id);
+		$model	= $this->entity;
+		return $this->hasOne($model::className(), ['id' => 'entity_id']);
 	}
 
 	public function afterSave($insert, $changedAttributes)
