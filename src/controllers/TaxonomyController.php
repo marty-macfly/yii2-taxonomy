@@ -66,8 +66,10 @@ class TaxonomyController extends Controller
         $terms = Term::find()->all();
         if ($model->load(Yii::$app->request->post()))
         {
+          //if taxonomy input not existing in database
           if(!Taxonomy::findOne(['type'=>Yii::$app->request->post("Taxonomy")['type'],'name'=>Yii::$app->request->post("Taxonomy")['name']]) && $model->save())
           {
+            //if Taxonomy -> saved -> update term assigned on this
             $this->syncTerm($model);
           }
           else return $this->render('create', ['model' => $model,'terms'=>$terms]);
@@ -98,8 +100,10 @@ class TaxonomyController extends Controller
             ]);
         }
     }
+
     private function syncTerm($model)
     {
+        //can only attach Taxonomy to Term, cannot detach taxonomy from term
         $term_to_assign = Yii::$app->request->post('terms_input',null);
         if(!is_null($term_to_assign))
         {
@@ -122,7 +126,6 @@ class TaxonomyController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 

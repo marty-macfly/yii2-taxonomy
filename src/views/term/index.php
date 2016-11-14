@@ -8,7 +8,7 @@ use macfly\taxonomy\assets\ModuleAsset;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ModuleAsset::register($this);
-$this->title = 'TAG MANAGEMENT';
+$this->title = 'Entity/Term Management';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="term-index">
@@ -28,13 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
           #
         </th>
         <th>
-          Term Name
-        </th>
-        <th class="text-center">
           Entity
         </th>
-        <th class="text-center">
+        <th>
           Taxonomy (type/name)
+        </th>
+        <th>
+          Term
         </th>
       </tr>
     </thead>
@@ -42,26 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
       <?php foreach($terms as $term): ?>
       <tr>
         <td>
-
         </td>
         <td>
-          <?php echo "<strong>".$term->name." </strong><span class='badge'>".$term->usage_count."</span>"; ?>
-          <span class="pull-right">
-          <?= Html::a('', ['term/view', 'id'=>$term->id], [
-            'title' => 'View',
-            'class' => 'glyphicon glyphicon-eye-open',
-            ]) ?>
-          <?= Html::a('', ['term/update', 'id'=>$term->id], [
-            'title' => 'Update',
-            'class' => 'glyphicon glyphicon-pencil',
-            ]) ?>
-          </span>
-        </td>
-        <td class="text-center">
           <?php
             foreach($term->entity as $item):
-              echo "<span class='text-black-bg'>".$item->nentity." </span>";
-              foreach($item->rentity as $key => $value): echo " | ".$key.": ".$value; endforeach;
+              echo "<span class='text-black-bg' title='".$item->entity."'>".$item->EntityShortName." </span>";
+              echo " | id: ".$item->ChildEntity->id;
               echo "<br>";
             endforeach;
             ?>
@@ -80,6 +66,19 @@ $this->params['breadcrumbs'][] = $this->title;
               'class' => 'glyphicon glyphicon-pencil',
               ]) ?>
             </span>
+        </td>
+        <td>
+          <?php echo "<strong>".$term->name." </strong><span class='badge'>".$term->usage_count."</span>"; ?>
+          <span class="pull-right">
+          <?= Html::a('', ['term/view', 'id'=>$term->id], [
+            'title' => 'View',
+            'class' => 'glyphicon glyphicon-eye-open',
+            ]) ?>
+          <?= Html::a('', ['term/update', 'id'=>$term->id], [
+            'title' => 'Update',
+            'class' => 'glyphicon glyphicon-pencil',
+            ]) ?>
+          </span>
         </td>
       </tr>
     <?php endforeach; ?>
