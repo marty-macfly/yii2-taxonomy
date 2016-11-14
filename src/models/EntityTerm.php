@@ -30,13 +30,7 @@ class EntityTerm extends \mhndev\yii2TaxonomyTerm\models\EntityTerm
 		$result = end($name);
 		return $result;
 	}
-
-	//return base name of this entity model, example: \common\models\Post
-	public function getEntityBaseName()
-	{
-		return $this->entity;
-	}
-
+	
 	//return Entity model related to this Term
 	public function getChildEntity()
 	{

@@ -11,7 +11,8 @@ use yii\db\Expression;
 class TermcrController extends Controller {
      public function actionIndex()
      {
-       $expression = isset(Yii::$app->params['termPeriod']) ? 'DATE_SUB(NOW(), INTERVAL '.Yii::$app->params['termPeriod'].' DAY)' : 'DATE_SUB(NOW(), INTERVAL 30 DAY)';
+       $delay = is_int(Yii::$app->params['termPeriod']) ? Yii::$app->params['termPeriod'] : 30;
+       $expression = 'DATE_SUB(NOW(), INTERVAL '. $delay .' DAY)';
        // Purge unused term, default is one month
        return Term::DeleteAll(['id'=>ArrayHelper::getColumn(Term::find()
            ->andWhere(['<', 'updated_at', new Expression($expression)])
