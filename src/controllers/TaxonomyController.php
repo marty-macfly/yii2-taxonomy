@@ -4,6 +4,7 @@ namespace macfly\taxonomy\controllers;
 
 use Yii;
 use macfly\taxonomy\models\Taxonomy;
+use macfly\taxonomy\models\TaxonomySearch;
 use macfly\taxonomy\models\Term;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -37,10 +38,14 @@ class TaxonomyController extends Controller
      */
     public function actionIndex()
     {
-        $taxonomies = Taxonomy::find()->all();
-        return $this->render('index', [
-            'taxonomies' => $taxonomies,
-        ]);
+
+      $searchModel = new TaxonomySearch();
+      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+      return $this->render('index', [
+          'searchModel' => $searchModel,
+          'dataProvider' => $dataProvider,
+      ]);
     }
 
     /**
