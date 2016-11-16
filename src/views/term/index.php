@@ -2,11 +2,13 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
 use macfly\taxonomy\assets\ModuleAsset;
-/* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
+/* @var $this yii\web\View */
+/* @var $searchModel macfly\taxonomy\models\TermSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 ModuleAsset::register($this);
 $this->title = 'Entity/Term Management';
 $this->params['breadcrumbs'][] = $this->title;
@@ -21,66 +23,32 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Taxonomies', ['taxonomy/index'], ['class' => 'btn btn-default pull-right']) ?>
     </p>
 </div>
-<table class="table table-striped cell-border" id="list-term">
-    <thead>
-      <tr class="table-header">
-        <th>
-          #
-        </th>
-        <th>
-          Entity
-        </th>
-        <th>
-          Taxonomy (type/name)
-        </th>
-        <th>
-          Term
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach($terms as $term): ?>
-      <tr>
-        <td>
-        </td>
-        <td>
-          <?php
-            foreach($term->entity as $item):
-              echo "<span class='text-black-bg' title='".$item->entity."'>". $item->entity ." </span>";
-              echo " | id: ". $item->childEntity->id;
-              echo "<br>";
-            endforeach;
-            ?>
-        </td>
-        <td>
-          <?php
-            echo "<span class='taxonomy-type'>".$term->taxonomy->type."</span><span class='text-black-bg'>".$term->taxonomy->name."</span>";
-            ?>
-            <span class="pull-right">
-            <?= Html::a('', ['taxonomy/view', 'id'=>$term->taxonomy->id], [
-              'title' => 'View',
-              'class' => 'glyphicon glyphicon-eye-open',
-              ]) ?>
-            <?= Html::a('', ['taxonomy/update', 'id'=>$term->taxonomy->id], [
-              'title' => 'Update',
-              'class' => 'glyphicon glyphicon-pencil',
-              ]) ?>
-            </span>
-        </td>
-        <td>
-          <?php echo "<strong>".$term->name." </strong><span class='badge'>".$term->usage_count."</span>"; ?>
-          <span class="pull-right">
-          <?= Html::a('', ['term/view', 'id'=>$term->id], [
-            'title' => 'View',
-            'class' => 'glyphicon glyphicon-eye-open',
-            ]) ?>
-          <?= Html::a('', ['term/update', 'id'=>$term->id], [
-            'title' => 'Update',
-            'class' => 'glyphicon glyphicon-pencil',
-            ]) ?>
-          </span>
-        </td>
-      </tr>
-    <?php endforeach; ?>
-    </tbody>
-  </table>
+<?php Pjax::begin(); ?>    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'id',
+            'entity'=>[
+              'label'=>'Entities',
+              'content'=> function($model){
+                  //return $model->hihihi;
+                  return implode('<br> ',$model->listentity);
+              },
+            ],
+            'taxonomy'=>[
+              'label'=>'Taxonomy',
+              'content'=> function($model){
+                return "<span class='taxonomy-type'>".$model->taxonomy->type."</span><span class='text-black-bg'>".$model->taxonomy->name."</span>";
+              },
+            ],
+            'name',
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'header'=> 'Action',
+              'template' => '{view}{update}',
+              'contentOptions' => ['class' => 'text-center'],
+            ],
+        ],
+    ]); ?>
+<?php Pjax::end(); ?></div>

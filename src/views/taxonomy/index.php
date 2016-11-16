@@ -2,82 +2,60 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
+use macfly\taxonomy\models\Term;
 /* @var $this yii\web\View */
+/* @var $searchModel macfly\taxonomy\models\TaxonomySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-use macfly\taxonomy\assets\ModuleAsset;
 
-ModuleAsset::register($this);
-$this->title = 'Taxonomies';
+$this->title = 'Taxonomies Management';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="taxonomy-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Create Taxonomy', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Term', ['term/index'], ['class' => 'btn btn-default pull-right']) ?>
+          <?= Html::a('Term', ['term/index'], ['class' => 'btn btn-default pull-right']) ?>
     </p>
-    <table class="table table-striped cell-border" id="list-taxonomy">
-        <thead>
-          <tr class="table-header">
-            <th>
-              #
-            </th>
-            <th>
-              Type
-            </th>
-            <th>
-              Name
-            </th>
-            <th class="text-center">
-              Term
-            </th>
-            <th>
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($taxonomies as $taxonomy): ?>
-          <tr>
-            <td>
-            </td>
-            <td>
-              <?= $taxonomy->type ?>
-            </td>
-            <td>
-              <?= $taxonomy->name ?>
-            </td>
-            <td>
-              <?php foreach($taxonomy->terms as $term): echo "<span class='text-black-bg'>".$term->name." </span>"; endforeach; ?>
-            </td>
-            <td>
-                <span class="pull-right">
-                <?= Html::a('', ['taxonomy/view', 'id'=>$taxonomy->id], [
-                  'title' => 'View',
-                  'class' => 'glyphicon glyphicon-eye-open',
-                  ]) ?>
-                <?= Html::a('', ['taxonomy/update', 'id'=>$taxonomy->id], [
-                  'title' => 'Update',
-                  'class' => 'glyphicon glyphicon-pencil',
-                  ]) ?>
-
-                <?php if($taxonomy->terms == null): ?>
-                <?= Html::a('', ['taxonomy/delete', 'id'=>$taxonomy->id], [
-                  'title' => 'Delete',
-                  'class' => 'glyphicon glyphicon-trash',
-                  'data' => [
-                    'confirm' => "Are you sure you want to delete profile?",
-                    'method' => 'post',
-                  ],
-                  ]) ?>
-                <?php endif; ?>
-                </span>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-        </tbody>
-      </table>
-</div>
+<?php Pjax::begin(); ?>    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'id',
+            'type',
+            'name',
+            'created_at',
+            'term' => [
+              'label' => 'Terms',
+              'attribute' => 'term_name',
+              'content' => function($model){
+                  return implode(', ',ArrayHelper::getColumn($model->terms,'name'));
+              },
+            ],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'header'=> 'Action',
+              'template' => '{view}{update}{del}',
+              'buttons' => [
+                  'del' => function($url,$model){
+                    return $model->terms != null
+                    ? Html::a('', ['taxonomy/delete', 'id'=>$model->id], [
+                        'title' => 'Delete',
+                        'class' => 'glyphicon glyphicon-trash',
+                        'data' => [
+                          'confirm' => "Are you sure you want to delete profile?",
+                          'method' => 'post',
+                        ],
+                      ])
+                    : '';
+                  },
+              ],
+            ],
+        ],
+    ]); ?>
+<?php Pjax::end(); ?></div>
