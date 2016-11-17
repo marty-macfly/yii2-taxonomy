@@ -17,15 +17,11 @@ class ModuleAsset extends AssetBundle
 {
     public $sourcePath = '@vendor/macfly/yii2-taxonomy/src/assets';
     public $css = [
-        'css/jquery.dataTables.min.css',
-        'css/responsive.dataTables.min.css',
         'css/multi-select.css',
         'css/jquery.scombobox.min.css',
         'css/main.css',
     ];
     public $js = [
-        'js/jquery.dataTables.min.js',
-        'js/dataTables.responsive.min.js',
         'js/jquery.multi-select.js',
         'js/jquery.scombobox.min.js',
         'js/main.js'
