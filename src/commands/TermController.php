@@ -10,7 +10,7 @@ use macfly\taxonomy\models\Term;
 
 class TermController extends Controller
 {
-    public function actionIndex($delay = 30)
+    public function actionClear($delay = 30)
     {
         $expression = 'DATE_SUB(NOW(), INTERVAL '. $delay .' DAY)';
 
