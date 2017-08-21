@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $model macfly\taxonomy\models\Taxonomy */
 /* @var $form yii\widgets\ActiveForm */
 use macfly\taxonomy\assets\ModuleAsset;
+
 ModuleAsset::register($this);
 ?>
 
@@ -24,9 +25,13 @@ ModuleAsset::register($this);
     </div>
     <div class="col-md-4">
       <select name="terms_input[]" id='terms-select' multiple='multiple'>
-         <?php foreach($terms as $item){ ?>
-        <option value="<?php echo $item->id; ?>"<?php if(isset($term_assigned)&&in_array($item->id,$term_assigned)){ echo 'Selected';}?>><?php echo $item->name; ?></option>
-      <?php } ?>
+         <?php foreach ($terms as $item) {
+    ?>
+        <option value="<?php echo $item->id; ?>"<?php if (isset($term_assigned)&&in_array($item->id, $term_assigned)) {
+        echo 'Selected';
+    } ?>><?php echo $item->name; ?></option>
+      <?php
+} ?>
       </select>
   	</div>
     <?php ActiveForm::end(); ?>

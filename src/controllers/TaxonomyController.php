@@ -38,11 +38,10 @@ class TaxonomyController extends Controller
      */
     public function actionIndex()
     {
+        $searchModel = new TaxonomySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-      $searchModel = new TaxonomySearch();
-      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-      return $this->render('index', [
+        return $this->render('index', [
           'searchModel' => $searchModel,
           'dataProvider' => $dataProvider,
       ]);
@@ -69,17 +68,15 @@ class TaxonomyController extends Controller
     {
         $model = new Taxonomy();
         $terms = Term::find()->all();
-        if ($model->load(Yii::$app->request->post()))
-        {
-          //if taxonomy input not existing in database
-          if(!Taxonomy::findOne(['type'=>Yii::$app->request->post("Taxonomy")['type'],'name'=>Yii::$app->request->post("Taxonomy")['name']]) && $model->save())
-          {
-            //if Taxonomy -> saved -> update term assigned on this
-            $this->syncTerm($model);
-          }
-          else return $this->render('create', ['model' => $model,'terms'=>$terms]);
-        }
-        else {
+        if ($model->load(Yii::$app->request->post())) {
+            //if taxonomy input not existing in database
+            if (!Taxonomy::findOne(['type'=>Yii::$app->request->post("Taxonomy")['type'],'name'=>Yii::$app->request->post("Taxonomy")['name']]) && $model->save()) {
+                //if Taxonomy -> saved -> update term assigned on this
+                $this->syncTerm($model);
+            } else {
+                return $this->render('create', ['model' => $model,'terms'=>$terms]);
+            }
+        } else {
             return $this->render('create', [
                 'model' => $model,'terms'=>$terms
             ]);
@@ -98,7 +95,7 @@ class TaxonomyController extends Controller
         $terms = Term::find()->all();
         $term_assigned = ArrayHelper::getColumn(Term::findAll(['taxonomy_id'=>$id]), 'id');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-              $this->syncTerm($model);
+            $this->syncTerm($model);
         } else {
             return $this->render('update', [
                 'model' => $model,'terms'=>$terms,'term_assigned'=>$term_assigned
@@ -109,16 +106,14 @@ class TaxonomyController extends Controller
     private function syncTerm($model)
     {
         //can only attach Taxonomy to Term, cannot detach taxonomy from term
-        $term_to_assign = Yii::$app->request->post('terms_input',null);
-        if(!is_null($term_to_assign))
-        {
-          $term_to_assign = is_array($term_to_assign) ? $term_to_assign : [$term_to_assign];
-          foreach($term_to_assign as $id)
-          {
-            $current_term = Term::findOne($id);
-            $current_term->taxonomy_id = $model->id;
-            $current_term->update();
-          }
+        $term_to_assign = Yii::$app->request->post('terms_input', null);
+        if (!is_null($term_to_assign)) {
+            $term_to_assign = is_array($term_to_assign) ? $term_to_assign : [$term_to_assign];
+            foreach ($term_to_assign as $id) {
+                $current_term = Term::findOne($id);
+                $current_term->taxonomy_id = $model->id;
+                $current_term->update();
+            }
         }
         return $this->redirect(['view', 'id' => $model->id]);
     }

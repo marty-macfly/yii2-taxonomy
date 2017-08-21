@@ -31,15 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'entity'=>[
               'label'=>'Entities',
-              'content'=> function($model){
+              'content'=> function ($model) {
                   //return $model->hihihi;
-                  return implode('<br> ',$model->listentity);
+                  return implode('<br> ', $model->listentity);
               },
             ],
             'taxonomy'=>[
               'label'=>'Taxonomy',
-              'content'=> function($model){
-                return "<span class='taxonomy-type'>".$model->taxonomy->type."</span><span class='text-black-bg'>".$model->taxonomy->name."</span>";
+              'content'=> function ($model) {
+                  return "<span class='taxonomy-type'>".$model->taxonomy->type."</span><span class='text-black-bg'>".$model->taxonomy->name."</span>";
               },
             ],
             'name',

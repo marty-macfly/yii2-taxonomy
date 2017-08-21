@@ -11,7 +11,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-
 /**
  * TermController implements the CRUD actions for Term model.
  */
@@ -93,9 +92,8 @@ class TermController extends Controller
         $model = $this->findModel($id);
         $taxonomies = Taxonomy::find()->all();
         if ($model->load(Yii::$app->request->post())) {
-          $this->storeTerm($model);
-        }
-        else {
+            $this->storeTerm($model);
+        } else {
             return $this->render('update', [
                 'model' => $model,'taxonomies'=>$taxonomies
             ]);
@@ -104,28 +102,32 @@ class TermController extends Controller
 
     private function storeTerm($model)
     {
-      $tag_type = Yii::$app->request->post('Taxonomy_type',null);
-      $tag_name = Yii::$app->request->post('Taxonomy_name',null);
-      if(!is_null($tag_type) && !is_null($tag_name) && $tag_type != "not selected" && $tag_name != "not selected")
-      {
-        $tax = !Taxonomy::findOne(['type'=>$tag_type,'name'=>$tag_name])? null : Taxonomy::findOne(['type'=>$tag_type,'name'=>$tag_name]);
-        //if new Taxonomy -> Save
-        if(is_null($tax))
-        {
-          $taxonomy = new Taxonomy();
-          $taxonomy->type = $tag_type;
-          $taxonomy->name = $tag_name;
-          if(!$taxonomy->save()) return false;
-          $model->taxonomy_id = $taxonomy->id;
+        $tag_type = Yii::$app->request->post('Taxonomy_type', null);
+        $tag_name = Yii::$app->request->post('Taxonomy_name', null);
+        if (!is_null($tag_type) && !is_null($tag_name) && $tag_type != "not selected" && $tag_name != "not selected") {
+            $tax = !Taxonomy::findOne(['type'=>$tag_type,'name'=>$tag_name])? null : Taxonomy::findOne(['type'=>$tag_type,'name'=>$tag_name]);
+            //if new Taxonomy -> Save
+            if (is_null($tax)) {
+                $taxonomy = new Taxonomy();
+                $taxonomy->type = $tag_type;
+                $taxonomy->name = $tag_name;
+                if (!$taxonomy->save()) {
+                    return false;
+                }
+                $model->taxonomy_id = $taxonomy->id;
+            }
+            //if isset Taxonomy -> Update
+            else {
+                $model->taxonomy_id = $tax->id;
+            }
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->redirect('create');
+            }
+        } else {
+            return $this->redirect('create');
         }
-        //if isset Taxonomy -> Update
-        else {
-          $model->taxonomy_id = $tax->id;
-        }
-        if($model->save()) return $this->redirect(['view', 'id' => $model->id]);
-        else return $this->redirect('create');
-      }
-      else return $this->redirect('create');
     }
     /**
      * Finds the Term model based on its primary key value.

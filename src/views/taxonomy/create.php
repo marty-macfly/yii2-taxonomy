@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 
-
 /* @var $this yii\web\View */
 /* @var $model macfly\taxonomy\models\Taxonomy */
 
