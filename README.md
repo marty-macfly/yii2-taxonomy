@@ -333,9 +333,9 @@ And you can add a cron job (http://www.crontab-generator.org/) to run at *00:00 
 
 on **Linux:**
 ```bash
-    0 0 * * 0 /path/to/yii/application/yii term-cron >> /var/log/console-app.log 2>&1
+    0 0 * * 0 /path/to/yii/application/yii term >> /var/log/console-app.log 2>&1
 ```
 on **Window Task Schedule:**
 ```bash
-    /path/to/yii/application/yii term-cron
+    /path/to/yii/application/yii term
 ```
