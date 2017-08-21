@@ -2,6 +2,8 @@
 
 namespace macfly\taxonomy;
 
+use Yii;
+
 class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'macfly\taxonomy\controllers';
