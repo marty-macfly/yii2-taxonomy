@@ -59,9 +59,9 @@ class PropertyTermBehavior extends BaseTermBehavior
 
     public function delPropertyTerm($type, $name, $value)
     {
-        $entity = $this->getPropertyTerms($type)->where([Taxonomy::tableName() . '.name' => $name])->andWhere([Term::tableName() . '.name' => $value])->all();
+        $entity = $this->getPropertyTerms($type)->where([Taxonomy::tableName() . '.name' => $name])->andWhere([Term::tableName() . '.name' => $value])->one();
 
-        if (is_object($entity)) {
+        if ($entity != false) {
             return $entity->delete();
         }
 
